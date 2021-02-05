@@ -42,6 +42,7 @@ export function FreeTextSearching() {
             {/*{list.map((el: r) => {*/}
             {/*   return <div>{el.value}</div>*/}
             {/*})}*/}
+            <div></div>
         </div>
     );
 }
