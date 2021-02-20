@@ -1,14 +1,20 @@
-import {r, randomJokesAPI} from "../api/api";
-import {Dispatch} from "redux";
+import {r} from "../api/api";
 
 const SET_FREE_ENTERED_TEXT = 'SET-FREE-ENTERED-TEXT'
+export const SET_FREE_ENTERED_ASYNC_TEXT = 'SET-FREE-ENTERED-ASYNC-TEXT'
 
 type setFreeEnteredTextActionType = {
     type: 'SET-FREE-ENTERED-TEXT'
     jokesList: Array<r>
 }
 
-type actionsType = setFreeEnteredTextActionType
+type setFreeEnteredAsyncTextActionType = {
+    type: 'SET-FREE-ENTERED-ASYNC-TEXT'
+    value: string
+}
+
+type actionsType = setFreeEnteredTextActionType |
+    setFreeEnteredAsyncTextActionType
 
 
 export type initialStateType = {
@@ -25,7 +31,7 @@ export const FreeTextSearchingReducer = (state: initialStateType = initialState,
         case 'SET-FREE-ENTERED-TEXT':
             return {
                 ...state,
-                jokesList:{...state.jokesList, ...action.jokesList}
+                jokesList:[...state.jokesList, ...action.jokesList]
 
             }
         default:
@@ -34,15 +40,18 @@ export const FreeTextSearchingReducer = (state: initialStateType = initialState,
 };
 
 export const setFreeEnteredTextAC = (jokesList: Array<r>): setFreeEnteredTextActionType => {
-        return {type: SET_FREE_ENTERED_TEXT, jokesList}
+    return {type: SET_FREE_ENTERED_TEXT, jokesList}
+}
+export const setFreeEnteredAsyncTextAC = (value: string): setFreeEnteredAsyncTextActionType => {
+    return {type: SET_FREE_ENTERED_ASYNC_TEXT, value}
 }
 
 
-export const setFreeEnteredTextTC = (text: string) => {
-    return (dispatch: Dispatch) => {
-        randomJokesAPI.searchFreeText(text)
-            .then((res) => {
-                dispatch(setFreeEnteredTextAC(res.data))
-            })
-    }
-}
+// export const setFreeEnteredTextTC = (text: string) => {
+//     return (dispatch: Dispatch) => {
+//         randomJokesAPI.searchFreeText(text)
+//             .then((res) => {
+//                 dispatch(setFreeEnteredTextAC(res.data))
+//             })
+//     }
+// }

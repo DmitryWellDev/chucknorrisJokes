@@ -1,9 +1,11 @@
 import {applyMiddleware, combineReducers, createStore} from 'redux';
 import {RandomJokeReducer} from "./RandomJokeReducer";
-import thunk from "redux-thunk";
 import {JokeCategoriesReducer} from "./JokeCategoriesReducer";
 import {FreeTextSearchingReducer} from "./FreeTextSearchingReducer";
+import createSagaMiddleware from 'redux-saga'
+import {rootWatcher} from "../saga";
 
+const sagaMiddleware = createSagaMiddleware()
 
 const rootReducer = combineReducers({
     RandomJokeReducer: RandomJokeReducer,
@@ -11,9 +13,11 @@ const rootReducer = combineReducers({
     FreeTextSearchingReducer: FreeTextSearchingReducer
 })
 
-export const store = createStore(rootReducer,  applyMiddleware(thunk));
+export const store = createStore(rootReducer,  applyMiddleware(sagaMiddleware));
 
 export type AppRootStateType = ReturnType<typeof rootReducer>
 
 // @ts-ignore
 window.store = store;
+
+sagaMiddleware.run(rootWatcher)

@@ -1,5 +1,4 @@
 import axios from "axios";
-import {type} from "os";
 
 const instance = axios.create({
     baseURL: 'https://api.chucknorris.io/jokes/',
@@ -8,9 +7,16 @@ const instance = axios.create({
 
 
 export const randomJokesAPI = {
+    getImage() {
+        return instance.get<RandomJokeResponseType>(`random`)
+            .then((res) => {
+                return res.data.icon_url
+            })
+    },
     getRandomJoke() {
         return instance.get<RandomJokeResponseType>(`random`)
             .then((res) => {
+                console.log(res)
                 return res.data.value
             })
     },
@@ -43,26 +49,14 @@ type RandomJokeResponseType = {
     "value": string
 }
 
-type CategoriesResponseType = {}
+export type CategoriesResponseType = {
+    data:Array<string>
+}
 
 type getJokeCategorieResponseType = {
     value: string
 }
 
-type freeTextSearchingResponseType = {
-    config: {}
-    data: freeSearchingDataType
-    headers: {}
-    request: any
-    status: number
-    statusText: string
-}
-
-
-type freeSearchingDataType = {
-    result: []
-    total: number
-}
 
 export type r = {
     created_at: string

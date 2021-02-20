@@ -1,25 +1,37 @@
-import {randomJokesAPI} from "../api/api";
-import {Dispatch} from "redux";
+import {CategoriesResponseType} from "../api/api";
 
 const SET_JOKE_CATEGORIES = 'SET-JOKE-CATEGORIES'
-const SET_CATEGORIE = 'SET-CATEGORIE'
+export const SET_ASYNC_JOKE_CATEGORIES = 'SET-ASYNC-JOKE-CATEGORIES'
+const SET_CATEGORY = 'SET-CATEGORY'
+export const SET_ASYNC_CATEGORY = 'SET-ASYNC-CATEGORY'
 
 type setJokeCategoriesActionType = {
     type: 'SET-JOKE-CATEGORIES'
     data: any
 }
 
+type setAsyncJokeCategoriesActionType = {
+    type: 'SET-ASYNC-JOKE-CATEGORIES'
+}
+
 type setCategoryActionType = {
-    type: 'SET-CATEGORIE'
+    type: 'SET-CATEGORY'
+    value: string
+}
+
+type setAsyncCategoryActionType = {
+    type: 'SET-ASYNC-CATEGORY'
     value: string
 }
 
 type actionsType = setJokeCategoriesActionType |
-    setCategoryActionType
+    setAsyncJokeCategoriesActionType |
+    setCategoryActionType |
+    setAsyncCategoryActionType
 
 export type initialStateType = {
     categories: Array<string>
-    value: any
+    value: string
 }
 
 const initialState = {
@@ -29,13 +41,14 @@ const initialState = {
 
 
 export const JokeCategoriesReducer = (state: initialStateType = initialState, action: actionsType): initialStateType => {
+
     switch (action.type) {
         case 'SET-JOKE-CATEGORIES':
             return {
                 ...state,
                 categories: [...state.categories, ...action.data]
             }
-        case "SET-CATEGORIE":
+        case 'SET-CATEGORY':
             return {
                 ...state,
                 value: action.value
@@ -45,28 +58,16 @@ export const JokeCategoriesReducer = (state: initialStateType = initialState, ac
     }
 };
 
-export const setJokeCategoriesAC = (data: any): setJokeCategoriesActionType => {
+export const setJokeCategoriesAC = (data: CategoriesResponseType): setJokeCategoriesActionType => {
     return {type: SET_JOKE_CATEGORIES, data}
 }
-export const setCategoryAC = (value: any): setCategoryActionType => {
-    return {type: SET_CATEGORIE, value}
+export const setAsyncJokeCategoriesAC = (): setAsyncJokeCategoriesActionType => {
+    return {type: SET_ASYNC_JOKE_CATEGORIES}
 }
+export const setCategoryAC = (value: string): setCategoryActionType => {
 
-
-export const setJokeCategoriesTC = () => {
-    return (dispatch: Dispatch) => {
-        randomJokesAPI.getJokeCategories()
-            .then((res) => {
-                dispatch(setJokeCategoriesAC(res))
-            })
-    }
+    return {type: SET_CATEGORY, value}
 }
-
-export const setCategoryTC = (category: string) => {
-    return (dispatch: Dispatch) => {
-        randomJokesAPI.getJokeCategory(category)
-            .then((res) => {
-                dispatch(setCategoryAC(res))
-            })
-    }
+export const setAsyncCategoryAC = (value: string): setAsyncCategoryActionType => {
+    return {type: SET_ASYNC_CATEGORY, value}
 }
