@@ -31,8 +31,7 @@ export const FreeTextSearchingReducer = (state: initialStateType = initialState,
         case 'SET-FREE-ENTERED-TEXT':
             return {
                 ...state,
-                jokesList:[...state.jokesList, ...action.jokesList]
-
+                jokesList: action.jokesList,
             }
         default:
             return state

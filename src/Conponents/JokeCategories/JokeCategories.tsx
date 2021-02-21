@@ -18,13 +18,11 @@ background-color: darkslateblue;
 border: 1px solid darkslateblue;
 box-shadow: 1px 6px 36px 7px;
 `
-
 const SelectButton = styled.div`
 width: 200px;
 height: 300px;
 position: relative;
 `
-
 const SelectButtonWrap = styled.div`
 width: 200px;
 height: 66px;
@@ -35,13 +33,10 @@ top: 0;
 bottom: 0;
 margin: auto;
 `
-
-
 const TextJokeWrap = styled.div`
 width: 1000px;
 position: relative;
 `
-
 const TextJoke = styled.div`
 width: 900px;
 height: 20px;
@@ -54,7 +49,6 @@ bottom: 0;
 margin: auto;
 color: aliceblue;
 `
-
 const NewSelect = styled.select`
 display: block;
 width: 100px;
@@ -67,7 +61,6 @@ border-radius: 10px;
 :focus {
     outline: none;
 `
-
 const NewButton = styled.button`
 border-radius: 10px;
 background-color: chocolate;
@@ -100,7 +93,12 @@ export function JokeCategories() {
     }
 
     const changeJokeOfCategory = () => {
-        dispatch(setAsyncCategoryAC(currentCat))
+        if (currentCat == '') {
+            dispatch(setAsyncCategoryAC(currentCat = jokeCategories[0]))
+            // setCurrentCat(currentCat = jokeCategories[0])
+        } else {
+            dispatch(setAsyncCategoryAC(currentCat))
+        }
     }
 
     return (
@@ -116,7 +114,9 @@ export function JokeCategories() {
                 </SelectButtonWrap>
             </SelectButton>
             <TextJokeWrap>
-                <TextJoke>{jokeAccordingToCat ? jokeAccordingToCat : <><img src={arrow}/><div>Choose the category</div></>}</TextJoke>
+                <TextJoke>{jokeAccordingToCat ? jokeAccordingToCat : <><img src={arrow}/>
+                    <div>Choose the category</div>
+                </>}</TextJoke>
             </TextJokeWrap>
         </Main>
     );

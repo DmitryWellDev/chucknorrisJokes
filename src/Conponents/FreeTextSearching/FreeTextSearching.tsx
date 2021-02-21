@@ -1,9 +1,11 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {useDispatch, useSelector} from "react-redux";
 import {AppRootStateType} from "../../Redux/store";
 import {setFreeEnteredAsyncTextAC} from "../../Redux/FreeTextSearchingReducer";
 import {r} from "../../api/api";
 import styled from "styled-components"
+import {ButtonNext, NewInput} from "./styled";
+import arrow from "../../essets/img/arrowLeft (1) (1) (1).gif";
 
 
 const Main = styled.div`
@@ -38,14 +40,6 @@ top: 117px;
 bottom: 0;
 margin: auto;
 `
-const NewInput = styled.input`
-height: 30px;
-border-radius: 10px;
-background-color: aliceblue;
-:active, 
-:focus {
-    outline: none;
-`
 const NewButton = styled.button`
 text-align: center;
 background-color: chocolate;
@@ -64,30 +58,40 @@ cursor: pointer;
 const PaginationWrap = styled.div`
 display: flex;
 `
-
+const MovingArrowWrap = styled.div`
+width: 100%;
+height: 100%;
+position: relative;
+`
+const MovingArrow = styled.div`
+width: 150px;
+height: 100px;
+color: aliceblue;
+left: 0;
+right: 0;
+top: 117px;
+bottom: 0;
+margin: 0 auto;
+position: absolute;
+`
 
 export const FreeTextSearching = React.memo(() => {
 
     const dispatch = useDispatch();
 
     const list = useSelector<AppRootStateType, any>(state => state.FreeTextSearchingReducer.jokesList)
-    console.log(list)
-    let [freeText, setFreeText] = useState('')
 
-    const FreeTextHandler = (value: string) => {
-        setFreeText(value)
-    }
+    let [freeText, setFreeText] = useState<string>('')
+    let [showError, setShowError] = useState<boolean>(false)
 
-    const submitHandler = () => {
-        dispatch(setFreeEnteredAsyncTextAC(freeText))
-    }
     let total: any = []
     let pageCount: number = 0
     let pages = []
-    let portionSize = 10
+    let portionSize: number = 10
     let leftEdge: number
     let rightEdge: number
-    let jokeAmount = 5
+    let jokeAmount: number = 5
+    let isShowButton: boolean = true
 
     for (let i: number = 0; i <= list.length; i++) {
         total.push(i)
@@ -98,57 +102,98 @@ export const FreeTextSearching = React.memo(() => {
         pages.push(i)
     }
 
+    const FreeTextHandler = (value: string) => {
+        setFreeText(value)
+    }
+
+    const submitHandler = () => {
+        if (freeText === '') {
+            setShowError(showError = true)
+        } else {
+            dispatch(setFreeEnteredAsyncTextAC(freeText))
+            setShowError(showError = false)
+        }
+    }
+
     const getCurrentPage = (page: number) => {
         setPortionNumber(page)
         setPageNum(page)
     }
 
+    const setErrorOff = () => {
+        setShowError(showError = false)
+    }
+
+    // edges of pagination portions
     let [portionNumber, setPortionNumber] = useState(1)
     leftEdge = (portionNumber - 1) * portionSize + 1
     rightEdge = portionNumber * portionSize
 
-let [pageNum, setPageNum] = useState(1)
+    //edges of jokes portions
+    let [pageNum, setPageNum] = useState(1)
     let leftEdgeJokePortion = (pageNum - 1) * jokeAmount + 1
     let rightEdgeJokePortion = pageNum * jokeAmount
 
 
     return (
         <Main className="App">
+            {/*input-button block*/}
             <InputButtonWrap>
                 <Wrap>
-                    <NewInput onChange={(e) => FreeTextHandler(e.currentTarget.value)} type="text"/>
+                    <NewInput
+                        onFocus={setErrorOff}
+                        placeholder={showError ? 'Please write something' : ''}
+                        showError={showError}
+                        onChange={(e) => FreeTextHandler(e.currentTarget.value)} type="text"/>
                     <NewButton onClick={submitHandler}>Enter some Text</NewButton>
                 </Wrap>
             </InputButtonWrap>
-            <TextJokesWrap>
-                <PaginationWrap>
-                    {portionNumber > 1 && <button onClick={() => {
-                        setPortionNumber(portionNumber - 1)
-                    }}>prev</button>}
-                    <div>
-                        {pages.filter((p) => {
-                            if (p >= leftEdge && p <= rightEdge) {
-                                return p
-                            }
-                        }).map(p => <PageNumbers onClick={() => {
-                            getCurrentPage(p)
-                        }}>{p}</PageNumbers>)}
-                    </div>
-                    {pageCount > portionNumber && <button onClick={() => {
-                        setPortionNumber(portionNumber + 1)
-                    }}>next</button>}
-                </PaginationWrap>
-                {list.filter((el: r, index: number) => {
-                    if (index >=leftEdgeJokePortion && index <= rightEdgeJokePortion) {
-                        return el
-                    }
-                }).map((el: r, index: number) => {
-                    return <TextJoke>
-                        <div key={index}>{el.value}</div>
-                        <div>----------------------------------</div>
-                    </TextJoke>
-                })}
-            </TextJokesWrap>
+            {/*-----------------------------------------------------------------------------------------------------------------*/}
+{/*pagination block*/}
+            {list.length !== 0 ? <TextJokesWrap>
+                    <PaginationWrap>
+                        {portionNumber > 1 && <button onClick={() => {
+                            setPortionNumber(portionNumber - 1)
+                        }}> {`prev`} </button>}
+                        <div>
+                            {pages.filter((p) => {
+                                if (p >= leftEdge && p <= rightEdge) {
+                                    console.log(p)
+                                    return p
+                                }
+                            }).map(p => <PageNumbers
+                                onClick={() => {
+                                    getCurrentPage(p)
+                                }}>{p}</PageNumbers>)}
+                        </div>
+                        <ButtonNext
+                            onClick={() => {
+                                setPortionNumber(portionNumber + 1)
+                            }}
+                            isShowButton={isShowButton}
+                        >
+                            {`next`}
+                        </ButtonNext>
+                    </PaginationWrap>
+                    {/*-------------------------------------------------------------------------------------------------------------------------*/}
+{/*text-jokes block*/}
+                    {list.filter((el: r, index: number) => {
+                        if (index >= leftEdgeJokePortion && index <= rightEdgeJokePortion) {
+                            return el
+                        }
+                    }).map((el: r, index: number) => {
+                        return <TextJoke>
+                            <div key={index}>{el.value}</div>
+                            <div>----------------------------------</div>
+                        </TextJoke>
+                    })}
+                </TextJokesWrap>
+                : <MovingArrowWrap>
+                    <MovingArrow>
+                        <img src={arrow}/>
+                        <div>Enter some text</div>
+                    </MovingArrow>
+                </MovingArrowWrap>}
         </Main>
     );
 })
