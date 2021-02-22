@@ -6,7 +6,7 @@ import {
     setAsyncJokeCategoriesAC,
 } from "../../Redux/JokeCategoriesReducer";
 import styled from "styled-components"
-import arrow from "../../essets/img/arrowLeft (1) (1) (1).gif";
+import arrow from "../../essets/img/arrowLeft.gif";
 
 
 const Main = styled.div`

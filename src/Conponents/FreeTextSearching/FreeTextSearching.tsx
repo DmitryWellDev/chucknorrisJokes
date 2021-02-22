@@ -3,77 +3,22 @@ import {useDispatch, useSelector} from "react-redux";
 import {AppRootStateType} from "../../Redux/store";
 import {setFreeEnteredAsyncTextAC} from "../../Redux/FreeTextSearchingReducer";
 import {r} from "../../api/api";
-import styled from "styled-components"
-import {ButtonNext, NewInput} from "./styled";
-import arrow from "../../essets/img/arrowLeft (1) (1) (1).gif";
+import {
+    ButtonNext,
+    NewInput,
+    Main,
+    TextJokesWrap,
+    TextJoke,
+    InputButtonWrap,
+    Wrap,
+    NewButton,
+    PageNumbers,
+    MovingArrow,
+    MovingArrowWrap,
+    PaginationWrap
+} from "./styled";
+import arrow from "../../essets/img/arrowLeft.gif";
 
-
-const Main = styled.div`
-display: flex;
-width:1200px;
-height: 100%;
-margin: 0 auto;
-background-color: darkslateblue;
-border: 1px solid darkslateblue;
-box-shadow: 1px 6px 36px 7px;
-`
-const TextJokesWrap = styled.div`
-width: 1000px;
-color: aliceblue;
-margin-top: 40px;
-`
-const TextJoke = styled.div`
-width: 900px;
-text-align: center;
-padding: 10px;
-`
-const InputButtonWrap = styled.div`
-width: 200px;
-height: 100%;
-position: relative;
-`
-const Wrap = styled.div`
-position: absolute;
-left: 0;
-right: 0;
-top: 117px;
-bottom: 0;
-margin: auto;
-`
-const NewButton = styled.button`
-text-align: center;
-background-color: chocolate;
-border-radius: 7px;
-:active, 
-:focus {
-    outline: none;
-}
-    color: aliceblue;
-    margin: 0 auto;
-`
-const PageNumbers = styled.span`
-margin-right: 5px;
-cursor: pointer;
-`
-const PaginationWrap = styled.div`
-display: flex;
-`
-const MovingArrowWrap = styled.div`
-width: 100%;
-height: 100%;
-position: relative;
-`
-const MovingArrow = styled.div`
-width: 150px;
-height: 100px;
-color: aliceblue;
-left: 0;
-right: 0;
-top: 117px;
-bottom: 0;
-margin: 0 auto;
-position: absolute;
-`
 
 export const FreeTextSearching = React.memo(() => {
 
@@ -91,7 +36,7 @@ export const FreeTextSearching = React.memo(() => {
     let leftEdge: number
     let rightEdge: number
     let jokeAmount: number = 5
-    let isShowButton: boolean = true
+    let isShowButton = true
 
     for (let i: number = 0; i <= list.length; i++) {
         total.push(i)
@@ -134,6 +79,10 @@ export const FreeTextSearching = React.memo(() => {
     let leftEdgeJokePortion = (pageNum - 1) * jokeAmount + 1
     let rightEdgeJokePortion = pageNum * jokeAmount
 
+    //hide button (next) in last page portion
+    if (pageCount >= leftEdge && pageCount <= rightEdge) {
+        isShowButton = false
+    }
 
     return (
         <Main className="App">
@@ -149,7 +98,7 @@ export const FreeTextSearching = React.memo(() => {
                 </Wrap>
             </InputButtonWrap>
             {/*-----------------------------------------------------------------------------------------------------------------*/}
-{/*pagination block*/}
+            {/*pagination block*/}
             {list.length !== 0 ? <TextJokesWrap>
                     <PaginationWrap>
                         {portionNumber > 1 && <button onClick={() => {
@@ -176,7 +125,7 @@ export const FreeTextSearching = React.memo(() => {
                         </ButtonNext>
                     </PaginationWrap>
                     {/*-------------------------------------------------------------------------------------------------------------------------*/}
-{/*text-jokes block*/}
+                    {/*text-jokes block*/}
                     {list.filter((el: r, index: number) => {
                         if (index >= leftEdgeJokePortion && index <= rightEdgeJokePortion) {
                             return el
