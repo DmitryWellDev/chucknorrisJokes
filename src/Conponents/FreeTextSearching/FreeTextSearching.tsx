@@ -1,10 +1,9 @@
-import React, {useEffect, useState} from 'react';
+import React, {useCallback, useState} from 'react';
 import {useDispatch, useSelector} from "react-redux";
 import {AppRootStateType} from "../../Redux/store";
 import {setFreeEnteredAsyncTextAC} from "../../Redux/FreeTextSearchingReducer";
 import {r} from "../../api/api";
 import {
-    ButtonNext,
     NewInput,
     Main,
     TextJokesWrap,
@@ -12,12 +11,11 @@ import {
     InputButtonWrap,
     Wrap,
     NewButton,
-    PageNumbers,
     MovingArrow,
-    MovingArrowWrap,
-    PaginationWrap
+    MovingArrowWrap
 } from "./styled";
 import arrow from "../../essets/img/arrowLeft.gif";
+import {PaginationPages} from "../PaginationPages/PaginationPages";
 
 
 export const FreeTextSearching = React.memo(() => {
@@ -29,23 +27,8 @@ export const FreeTextSearching = React.memo(() => {
     let [freeText, setFreeText] = useState<string>('')
     let [showError, setShowError] = useState<boolean>(false)
 
-    let total: any = []
-    let pageCount: number = 0
-    let pages = []
-    let portionSize: number = 10
-    let leftEdge: number
-    let rightEdge: number
-    let jokeAmount: number = 5
-    let isShowButton = true
-
-    for (let i: number = 0; i <= list.length; i++) {
-        total.push(i)
-        pageCount = total.length / portionSize
-    }
-
-    for (let i: number = 1; i <= pageCount; i++) {
-        pages.push(i)
-    }
+    let amountOfItems: number = 5
+    let portionPagesSize: number = 10
 
     const FreeTextHandler = (value: string) => {
         setFreeText(value)
@@ -60,29 +43,18 @@ export const FreeTextSearching = React.memo(() => {
         }
     }
 
-    const getCurrentPage = (page: number) => {
-        setPortionNumber(page)
-        setPageNum(page)
-    }
-
     const setErrorOff = () => {
         setShowError(showError = false)
     }
 
-    // edges of pagination portions
-    let [portionNumber, setPortionNumber] = useState(1)
-    leftEdge = (portionNumber - 1) * portionSize + 1
-    rightEdge = portionNumber * portionSize
+    const getCurrentPage = useCallback((page: number) => {
+        setPageNum(page)
+    }, [])
 
     //edges of jokes portions
     let [pageNum, setPageNum] = useState(1)
-    let leftEdgeJokePortion = (pageNum - 1) * jokeAmount + 1
-    let rightEdgeJokePortion = pageNum * jokeAmount
-
-    //hide button (next) in last page portion
-    if (pageCount >= leftEdge && pageCount <= rightEdge) {
-        isShowButton = false
-    }
+    let leftEdgeJokePortion = (pageNum - 1) * amountOfItems + 1
+    let rightEdgeJokePortion = pageNum * amountOfItems
 
     return (
         <Main className="App">
@@ -100,30 +72,9 @@ export const FreeTextSearching = React.memo(() => {
             {/*-----------------------------------------------------------------------------------------------------------------*/}
             {/*pagination block*/}
             {list.length !== 0 ? <TextJokesWrap>
-                    <PaginationWrap>
-                        {portionNumber > 1 && <button onClick={() => {
-                            setPortionNumber(portionNumber - 1)
-                        }}> {`prev`} </button>}
-                        <div>
-                            {pages.filter((p) => {
-                                if (p >= leftEdge && p <= rightEdge) {
-                                    console.log(p)
-                                    return p
-                                }
-                            }).map(p => <PageNumbers
-                                onClick={() => {
-                                    getCurrentPage(p)
-                                }}>{p}</PageNumbers>)}
-                        </div>
-                        <ButtonNext
-                            onClick={() => {
-                                setPortionNumber(portionNumber + 1)
-                            }}
-                            isShowButton={isShowButton}
-                        >
-                            {`next`}
-                        </ButtonNext>
-                    </PaginationWrap>
+                    <PaginationPages list={list}
+                                     getCurrentPage={getCurrentPage}
+                                     portionPagesSize={portionPagesSize}/>
                     {/*-------------------------------------------------------------------------------------------------------------------------*/}
                     {/*text-jokes block*/}
                     {list.filter((el: r, index: number) => {

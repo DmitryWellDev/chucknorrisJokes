@@ -4,13 +4,15 @@ import {JokeCategoriesReducer} from "./JokeCategoriesReducer";
 import {FreeTextSearchingReducer} from "./FreeTextSearchingReducer";
 import createSagaMiddleware from 'redux-saga'
 import {rootWatcher} from "../saga";
+import {PaginationPagesReducer} from "./PaginationPagesReducer";
 
 const sagaMiddleware = createSagaMiddleware()
 
 const rootReducer = combineReducers({
     RandomJokeReducer: RandomJokeReducer,
     JokeCategoriesReducer: JokeCategoriesReducer,
-    FreeTextSearchingReducer: FreeTextSearchingReducer
+    FreeTextSearchingReducer: FreeTextSearchingReducer,
+    PaginationPagesReducer: PaginationPagesReducer
 })
 
 export const store = createStore(rootReducer,  applyMiddleware(sagaMiddleware));
