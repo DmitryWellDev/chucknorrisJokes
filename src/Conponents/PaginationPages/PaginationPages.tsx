@@ -76,6 +76,7 @@ export const PaginationPages = React.memo((props: PaginationPagesPropsType) => {
             >
                 {`next`}
             </ButtonNext>
+            <div>dfdfdf</div>
         </PaginationWrap>
     )
 })
