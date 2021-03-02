@@ -1,4 +1,4 @@
-import React, {useCallback, useState} from 'react';
+import React, {useState} from 'react';
 import {useDispatch, useSelector} from "react-redux";
 import {AppRootStateType} from "../../Redux/store";
 import {setFreeEnteredAsyncTextAC} from "../../Redux/FreeTextSearchingReducer";
@@ -12,17 +12,18 @@ import {
     Wrap,
     NewButton,
     MovingArrow,
-    MovingArrowWrap
+    MovingArrowWrap,
+    JokesWrap
 } from "./styled";
 import arrow from "../../essets/img/arrowLeft.gif";
 import {PaginationPages} from "../PaginationPages/PaginationPages";
-
 
 export const FreeTextSearching = React.memo(() => {
 
     const dispatch = useDispatch();
 
     const list = useSelector<AppRootStateType, any>(state => state.FreeTextSearchingReducer.jokesList)
+    const pageNumber = useSelector<AppRootStateType, any>(state => state.PaginationPagesReducer.currentPage)
 
     let [freeText, setFreeText] = useState<string>('')
     let [showError, setShowError] = useState<boolean>(false)
@@ -47,14 +48,14 @@ export const FreeTextSearching = React.memo(() => {
         setShowError(showError = false)
     }
 
-    const getCurrentPage = useCallback((page: number) => {
-        setPageNum(page)
-    }, [])
-
     //edges of jokes portions
     let [pageNum, setPageNum] = useState(1)
     let leftEdgeJokePortion = (pageNum - 1) * amountOfItems + 1
     let rightEdgeJokePortion = pageNum * amountOfItems
+
+    const getPage = () => {
+        setPageNum(pageNumber)
+    }
 
     return (
         <Main className="App">
@@ -66,34 +67,37 @@ export const FreeTextSearching = React.memo(() => {
                         placeholder={showError ? 'Please write something' : ''}
                         showError={showError}
                         onChange={(e) => FreeTextHandler(e.currentTarget.value)} type="text"/>
-                    <NewButton onClick={submitHandler}>Enter some Text</NewButton>
+                    <NewButton onClick={submitHandler}>{`Enter some Text`}</NewButton>
                 </Wrap>
             </InputButtonWrap>
             {/*-----------------------------------------------------------------------------------------------------------------*/}
             {/*pagination block*/}
             {list.length !== 0 ? <TextJokesWrap>
                     <PaginationPages list={list}
-                                     getCurrentPage={getCurrentPage}
+                                     getPage={getPage}
                                      portionPagesSize={portionPagesSize}/>
                     {/*-------------------------------------------------------------------------------------------------------------------------*/}
                     {/*text-jokes block*/}
-                    {list.filter((el: r, index: number) => {
-                        if (index >= leftEdgeJokePortion && index <= rightEdgeJokePortion) {
-                            return el
-                        }
-                    }).map((el: r, index: number) => {
-                        return <TextJoke>
-                            <div key={index}>{el.value}</div>
-                            <div>----------------------------------</div>
-                        </TextJoke>
-                    })}
+                    <JokesWrap>
+                        {list.filter((el: r, index: number) => {
+                            if (index >= leftEdgeJokePortion && index <= rightEdgeJokePortion) {
+                                return el
+                            }
+                        }).map((el: r, index: number) => {
+                            return <TextJoke key={index}>
+                                <div>{el.value}</div>
+                                <div>----------------------------------</div>
+                            </TextJoke>
+                        })}
+                    </JokesWrap>
                 </TextJokesWrap>
                 : <MovingArrowWrap>
                     <MovingArrow>
-                        <img src={arrow}/>
+                        <img alt={'arrow'} src={arrow}/>
                         <div>Enter some text</div>
                     </MovingArrow>
                 </MovingArrowWrap>}
         </Main>
     );
-})
+}
+)

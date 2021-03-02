@@ -5,71 +5,16 @@ import {
     setAsyncCategoryAC,
     setAsyncJokeCategoriesAC,
 } from "../../Redux/JokeCategoriesReducer";
-import styled from "styled-components"
 import arrow from "../../essets/img/arrowLeft.gif";
-
-
-const Main = styled.div`
-display: flex;
-width:1200px;
-height: 300px;
-margin: 0 auto;
-background-color: darkslateblue;
-border: 1px solid darkslateblue;
-box-shadow: 1px 6px 36px 7px;
-`
-const SelectButton = styled.div`
-width: 200px;
-height: 300px;
-position: relative;
-`
-const SelectButtonWrap = styled.div`
-width: 200px;
-height: 66px;
-position: absolute;
-left: 0;
-right: 0;
-top: 0;
-bottom: 0;
-margin: auto;
-`
-const TextJokeWrap = styled.div`
-width: 1000px;
-position: relative;
-`
-const TextJoke = styled.div`
-width: 900px;
-height: 20px;
-text-align: center;
-position: absolute;
-left: 0;
-right: 0;
-top: 0;
-bottom: 0;
-margin: auto;
-color: aliceblue;
-`
-const NewSelect = styled.select`
-display: block;
-width: 100px;
-height: 30px;
-font-size: 17px;
-margin: 0 auto;
-background-color: aliceblue;
-border-radius: 10px;
-:active, 
-:focus {
-    outline: none;
-`
-const NewButton = styled.button`
-border-radius: 10px;
-background-color: chocolate;
-color: aliceblue;
-:active, 
-:focus {
-    outline: none;
-}
-`
+import {
+    Main,
+    SelectButton,
+    SelectButtonWrap,
+    NewButton,
+    TextJokeWrap,
+    TextJoke,
+    NewSelect
+} from "./styled";
 
 export function JokeCategories() {
 
@@ -93,7 +38,7 @@ export function JokeCategories() {
     }
 
     const changeJokeOfCategory = () => {
-        if (currentCat == '') {
+        if (currentCat === '') {
             dispatch(setAsyncCategoryAC(currentCat = jokeCategories[0]))
             // setCurrentCat(currentCat = jokeCategories[0])
         } else {
@@ -114,7 +59,7 @@ export function JokeCategories() {
                 </SelectButtonWrap>
             </SelectButton>
             <TextJokeWrap>
-                <TextJoke>{jokeAccordingToCat ? jokeAccordingToCat : <><img src={arrow}/>
+                <TextJoke>{jokeAccordingToCat ? jokeAccordingToCat : <><img alt={'arrow'} src={arrow}/>
                     <div>Choose the category</div>
                 </>}</TextJoke>
             </TextJokeWrap>

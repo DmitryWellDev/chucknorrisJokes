@@ -16,7 +16,6 @@ export const randomJokesAPI = {
     getRandomJoke() {
         return instance.get<RandomJokeResponseType>(`random`)
             .then((res) => {
-                console.log(res)
                 return res.data.value
             })
     },
