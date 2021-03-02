@@ -1,0 +1,23 @@
+{
+  "files": {
+    "main.css": "/chucknorrisJokes/static/css/main.31acd1ce.chunk.css",
+    "main.js": "/chucknorrisJokes/static/js/main.428f1839.chunk.js",
+    "main.js.map": "/chucknorrisJokes/static/js/main.428f1839.chunk.js.map",
+    "runtime-main.js": "/chucknorrisJokes/static/js/runtime-main.0dc6ab75.js",
+    "runtime-main.js.map": "/chucknorrisJokes/static/js/runtime-main.0dc6ab75.js.map",
+    "static/js/2.c03188ac.chunk.js": "/chucknorrisJokes/static/js/2.c03188ac.chunk.js",
+    "static/js/2.c03188ac.chunk.js.map": "/chucknorrisJokes/static/js/2.c03188ac.chunk.js.map",
+    "static/js/3.547baf94.chunk.js": "/chucknorrisJokes/static/js/3.547baf94.chunk.js",
+    "static/js/3.547baf94.chunk.js.map": "/chucknorrisJokes/static/js/3.547baf94.chunk.js.map",
+    "index.html": "/chucknorrisJokes/index.html",
+    "static/css/main.31acd1ce.chunk.css.map": "/chucknorrisJokes/static/css/main.31acd1ce.chunk.css.map",
+    "static/js/2.c03188ac.chunk.js.LICENSE.txt": "/chucknorrisJokes/static/js/2.c03188ac.chunk.js.LICENSE.txt",
+    "static/media/arrowLeft.abdec602.gif": "/chucknorrisJokes/static/media/arrowLeft.abdec602.gif"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.0dc6ab75.js",
+    "static/js/2.c03188ac.chunk.js",
+    "static/css/main.31acd1ce.chunk.css",
+    "static/js/main.428f1839.chunk.js"
+  ]
+}
